@@ -1,4 +1,4 @@
-package org.ui.thesis.client.gemini;
+package org.ui.thesis.clients.gemini;
 
 public interface GeminiClient {
 
