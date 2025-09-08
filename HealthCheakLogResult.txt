@@ -1,0 +1,135 @@
+C:\Users\faisa_77vm00v\.jdks\openjdk-21.0.2\bin\java.exe -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:61902,suspend=y,server=n -javaagent:C:\Users\faisa_77vm00v\AppData\Local\JetBrains\IdeaIC2024.1\captureAgent\debugger-agent.jar -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath "E:\Cool Yeah\KA Ultimate\generative-ai-scoring\target\classes;C:\Users\faisa_77vm00v\.m2\repository\com\google\genai\google-genai\1.14.0\google-genai-1.14.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\auth\google-auth-library-oauth2-http\1.33.0\google-auth-library-oauth2-http-1.33.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\auto\value\auto-value-annotations\1.11.0\auto-value-annotations-1.11.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\auth\google-auth-library-credentials\1.33.0\google-auth-library-credentials-1.33.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\http-client\google-http-client\1.46.2\google-http-client-1.46.2.jar;C:\Users\faisa_77vm00v\.m2\repository\io\grpc\grpc-context\1.70.0\grpc-context-1.70.0.jar;C:\Users\faisa_77vm00v\.m2\repository\io\grpc\grpc-api\1.70.0\grpc-api-1.70.0.jar;C:\Users\faisa_77vm00v\.m2\repository\io\opencensus\opencensus-api\0.31.1\opencensus-api-0.31.1.jar;C:\Users\faisa_77vm00v\.m2\repository\io\opencensus\opencensus-contrib-http-util\0.31.1\opencensus-contrib-http-util-0.31.1.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\http-client\google-http-client-gson\1.46.2\google-http-client-gson-1.46.2.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\guava\guava\33.4.0-android\guava-33.4.0-android.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\guava\failureaccess\1.0.2\failureaccess-1.0.2.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\faisa_77vm00v\.m2\repository\org\checkerframework\checker-qual\3.43.0\checker-qual-3.43.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\errorprone\error_prone_annotations\2.36.0\error_prone_annotations-2.36.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\code\gson\gson\2.12.1\gson-2.12.1.jar;C:\Users\faisa_77vm00v\.m2\repository\org\apache\httpcomponents\httpclient\4.5.14\httpclient-4.5.14.jar;C:\Users\faisa_77vm00v\.m2\repository\org\apache\httpcomponents\httpcore\4.4.16\httpcore-4.4.16.jar;C:\Users\faisa_77vm00v\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\faisa_77vm00v\.m2\repository\commons-codec\commons-codec\1.11\commons-codec-1.11.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\auto\value\auto-value\1.11.0\auto-value-1.11.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\api\api-common\2.47.0\api-common-2.47.0.jar;C:\Users\faisa_77vm00v\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar;C:\Users\faisa_77vm00v\.m2\repository\com\google\j2objc\j2objc-annotations\3.0.0\j2objc-annotations-3.0.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.17.2\jackson-datatype-jdk8-2.17.2.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.17.2\jackson-datatype-jsr310-2.17.2.jar;C:\Users\faisa_77vm00v\.m2\repository\org\java-websocket\Java-WebSocket\1.6.0\Java-WebSocket-1.6.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\squareup\okhttp3\okhttp\4.12.0\okhttp-4.12.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\squareup\okio\okio\3.6.0\okio-3.6.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\squareup\okio\okio-jvm\3.6.0\okio-jvm-3.6.0.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jspecify\jspecify\1.0.0\jspecify-1.0.0.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk8\1.9.10\kotlin-stdlib-jdk8-1.9.10.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib\1.9.10\kotlin-stdlib-1.9.10.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-common\1.9.10\kotlin-stdlib-common-1.9.10.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\annotations\13.0\annotations-13.0.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk7\1.9.10\kotlin-stdlib-jdk7-1.9.10.jar;C:\Users\faisa_77vm00v\.m2\repository\com\openai\openai-java\3.4.1\openai-java-3.4.1.jar;C:\Users\faisa_77vm00v\.m2\repository\com\openai\openai-java-client-okhttp\3.4.1\openai-java-client-okhttp-3.4.1.jar;C:\Users\faisa_77vm00v\.m2\repository\com\openai\openai-java-core\3.4.1\openai-java-core-3.4.1.jar;C:\Users\faisa_77vm00v\.m2\repository\io\swagger\core\v3\swagger-annotations\2.2.31\swagger-annotations-2.2.31.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\module\jackson-module-kotlin\2.18.2\jackson-module-kotlin-2.18.2.jar;C:\Users\faisa_77vm00v\.m2\repository\org\jetbrains\kotlin\kotlin-reflect\1.8.10\kotlin-reflect-1.8.10.jar;C:\Users\faisa_77vm00v\.m2\repository\org\apache\httpcomponents\core5\httpcore5\5.2.4\httpcore5-5.2.4.jar;C:\Users\faisa_77vm00v\.m2\repository\org\apache\httpcomponents\client5\httpclient5\5.3.1\httpclient5-5.3.1.jar;C:\Users\faisa_77vm00v\.m2\repository\org\apache\httpcomponents\core5\httpcore5-h2\5.2.4\httpcore5-h2-5.2.4.jar;C:\Users\faisa_77vm00v\.m2\repository\com\github\victools\jsonschema-generator\4.38.0\jsonschema-generator-4.38.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\classmate\1.7.0\classmate-1.7.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\github\victools\jsonschema-module-jackson\4.38.0\jsonschema-module-jackson-4.38.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\github\victools\jsonschema-module-swagger-2\4.38.0\jsonschema-module-swagger-2-4.38.0.jar;C:\Users\faisa_77vm00v\.m2\repository\com\squareup\okhttp3\logging-interceptor\4.12.0\logging-interceptor-4.12.0.jar;C:\Users\faisa_77vm00v\.m2\repository\org\slf4j\slf4j-api\2.0.13\slf4j-api-2.0.13.jar;C:\Users\faisa_77vm00v\.m2\repository\ch\qos\logback\logback-classic\1.5.6\logback-classic-1.5.6.jar;C:\Users\faisa_77vm00v\.m2\repository\ch\qos\logback\logback-core\1.5.6\logback-core-1.5.6.jar;C:\Users\faisa_77vm00v\.m2\repository\org\projectlombok\lombok\1.18.32\lombok-1.18.32.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.16.1\jackson-databind-2.16.1.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.16.1\jackson-annotations-2.16.1.jar;C:\Users\faisa_77vm00v\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.16.1\jackson-core-2.16.1.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.4\lib\idea_rt.jar" org.ui.thesis.Main
+Connected to the target VM, address: '127.0.0.1:61902', transport: 'socket'
+Gemini Result:
+INFO  2025-09-08 20:26:50.418 [main] o.u.t.c.g.GeminiClientImpl - RESULT: AI learns from data to recognize patterns and make decisions.
+INFO  2025-09-08 20:26:50.419 [main] o.u.t.c.g.GeminiClientImpl - TOKEN USAGE: 861
+WARN  2025-09-08 20:26:50.432 [main] o.u.t.c.g.GeminiClientImpl - {
+  "sdkHttpResponse" : {
+    "headers" : {
+      "date" : "Mon, 08 Sep 2025 13:26:50 GMT",
+      "server" : "scaffolding on HTTPServer2",
+      "x-content-type-options" : "nosniff",
+      "x-xss-protection" : "0",
+      "vary" : "Referer",
+      "x-frame-options" : "SAMEORIGIN",
+      "content-type" : "application/json; charset=UTF-8",
+      "server-timing" : "gfet4t7; dur=5321",
+      "alt-svc" : "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+    },
+    "body" : null
+  },
+  "candidates" : [ {
+    "content" : {
+      "parts" : [ {
+        "videoMetadata" : null,
+        "thought" : null,
+        "inlineData" : null,
+        "fileData" : null,
+        "thoughtSignature" : null,
+        "codeExecutionResult" : null,
+        "executableCode" : null,
+        "functionCall" : null,
+        "functionResponse" : null,
+        "text" : "AI learns from data to recognize patterns and make decisions."
+      } ],
+      "role" : "model"
+    },
+    "citationMetadata" : null,
+    "finishMessage" : null,
+    "tokenCount" : null,
+    "finishReason" : "STOP",
+    "urlContextMetadata" : null,
+    "avgLogprobs" : null,
+    "groundingMetadata" : null,
+    "index" : 0,
+    "logprobsResult" : null,
+    "safetyRatings" : null
+  } ],
+  "createTime" : null,
+  "automaticFunctionCallingHistory" : null,
+  "modelVersion" : "gemini-2.5-flash",
+  "promptFeedback" : null,
+  "responseId" : "mtm-aJyyEoLhz7IPhKHewA4",
+  "usageMetadata" : {
+    "cacheTokensDetails" : null,
+    "cachedContentTokenCount" : null,
+    "candidatesTokenCount" : 11,
+    "candidatesTokensDetails" : null,
+    "promptTokenCount" : 9,
+    "promptTokensDetails" : [ {
+      "modality" : "TEXT",
+      "tokenCount" : 9
+    } ],
+    "thoughtsTokenCount" : 841,
+    "toolUsePromptTokenCount" : null,
+    "toolUsePromptTokensDetails" : null,
+    "totalTokenCount" : 861,
+    "trafficType" : null
+  }
+}
+DeepSeek Result:
+INFO  2025-09-08 20:26:54.734 [main] o.u.t.c.d.DeepSeekClientImpl - RESULT: AI learns patterns from data to make predictions or decisions.
+INFO  2025-09-08 20:26:54.735 [main] o.u.t.c.d.DeepSeekClientImpl - TOKEN USAGE: 0
+WARN  2025-09-08 20:26:54.736 [main] o.u.t.c.d.DeepSeekClientImpl - {
+  "id" : "d3bd272e-3a0f-42d4-9ca6-e65be6f99ecc",
+  "choices" : [ {
+    "message" : {
+      "content" : "AI learns patterns from data to make predictions or decisions.",
+      "role" : "assistant"
+    }
+  } ],
+  "usage" : {
+    "completionTokens" : 0,
+    "promptTokens" : 0,
+    "promptCacheHitTokens" : 0,
+    "promptCacheMissTokens" : 0,
+    "totalTokens" : 0
+  },
+  "model" : "deepseek-chat",
+  "system_fingerprint" : "fp_08f168e49b_prod0820_fp8_kvcache"
+}
+OpenAi Result:
+INFO  2025-09-08 20:27:01.225 [main] o.u.t.c.o.OpenAiClientImpl - RESULT: Machines learn patterns from data to predict and decide.
+INFO  2025-09-08 20:27:01.225 [main] o.u.t.c.o.OpenAiClientImpl - TOKEN USAGE: 609
+WARN  2025-09-08 20:27:01.240 [main] o.u.t.c.o.OpenAiClientImpl - {
+  "id" : "chatcmpl-CDWBU9u7MtUl82vrmcn0mBZ6XxY3N",
+  "choices" : [ {
+    "finish_reason" : "stop",
+    "index" : 0,
+    "message" : {
+      "content" : "Machines learn patterns from data to predict and decide.",
+      "refusal" : null,
+      "role" : "assistant",
+      "annotations" : [ ],
+      "valid" : true
+    },
+    "valid" : true
+  } ],
+  "created" : 1757338016,
+  "model" : "gpt-5-nano-2025-08-07",
+  "object" : "chat.completion",
+  "service_tier" : "default",
+  "system_fingerprint" : null,
+  "usage" : {
+    "completion_tokens" : 595,
+    "prompt_tokens" : 14,
+    "total_tokens" : 609,
+    "completion_tokens_details" : {
+      "accepted_prediction_tokens" : 0,
+      "audio_tokens" : 0,
+      "reasoning_tokens" : 576,
+      "rejected_prediction_tokens" : 0,
+      "valid" : true
+    },
+    "prompt_tokens_details" : {
+      "audio_tokens" : 0,
+      "cached_tokens" : 0,
+      "valid" : true
+    },
+    "valid" : true
+  },
+  "valid" : true
+}
+Disconnected from the target VM, address: '127.0.0.1:61902', transport: 'socket'
+
+Process finished with exit code 0

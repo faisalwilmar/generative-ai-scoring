@@ -28,8 +28,8 @@ public class GeminiClientImpl implements GeminiClient {
 				GenerateContentConfig.builder().temperature(Float.valueOf("0")).build());
 
 		try {
-			log.info("RESULT:" + response.text());
-			log.info("TOKEN USAGE:" + response.usageMetadata().get().totalTokenCount());
+			log.info("RESULT: " + response.text());
+			log.info("TOKEN USAGE: " + response.usageMetadata().get().totalTokenCount().get());
 			String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
 			log.warn(jsonResponse);
 		}

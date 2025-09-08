@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface DeepSeekClient {
 
+	void healthCheck();
+
 	DeepSeekNoStreamResponse chat(DeepSeekModel model, List<DeepSeekMessage> messages) throws DeepSeekException;
 
 	DeepSeekNoStreamResponse chatJson(DeepSeekModel model, List<DeepSeekMessage> messages,

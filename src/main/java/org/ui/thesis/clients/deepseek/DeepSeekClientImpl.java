@@ -1,6 +1,8 @@
 package org.ui.thesis.clients.deepseek;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import lombok.extern.slf4j.Slf4j;
 import org.ui.thesis.clients.deepseek.models.DeepSeekMessage;
 import org.ui.thesis.clients.deepseek.models.DeepSeekModel;
 import org.ui.thesis.clients.deepseek.models.DeepSeekNoStreamResponse;
@@ -15,6 +17,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 
+@Slf4j
 public class DeepSeekClientImpl implements DeepSeekClient {
 
 	private final Duration TIMEOUT = Duration.ofSeconds(30);
@@ -32,6 +35,7 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 		this.baseUrl = baseUrl;
 		this.httpClient = HttpClient.newBuilder().connectTimeout(TIMEOUT).build();
 		this.objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new Jdk8Module());
 	}
 
 	/**
@@ -47,6 +51,21 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 	 */
 	public DeepSeekClientImpl() {
 		this(System.getenv("DEEPSEEK_API_KEY"));
+	}
+
+	@Override
+	public void healthCheck() {
+		try {
+			DeepSeekNoStreamResponse response = this.chat(DeepSeekModel.DEEPSEEK_CHAT,
+					List.of(DeepSeekMessage.ofUser("Explain how AI works in a few words")));
+			log.info("RESULT: " + response.getChoices().getFirst().getMessage().getContent());
+			log.info("TOKEN USAGE: " + response.getUsage().getTotalTokens());
+			String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+			log.warn(jsonResponse);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	/**
