@@ -2,25 +2,27 @@
 
 Console App for Automated Essay Scoring using easily accessible Generative AI which are DeepSeek, Gemini, and OpenAI.
 
-<hr>
+<hr>  
 
 ## Spec
 
 - Java 21
 - Maven
 
-<hr>  
+<hr>    
 
 ## Config
 
 Environment Variables :
 
-```  
-GEMINI_API_KEY=<your-gemini-api-key>  
-DEEPSEEK_API_KEY=<your-deepseek-api-key>  
-```  
-
-<hr>  
+```
+GEMINI_API_KEY=<your-gemini-api-key>
+DEEPSEEK_API_KEY=<your-deepseek-api-key>
+OPENAI_PROJECT_ID=<optional-your-openai-project-id>  
+OPENAI_ORG_ID=org-optional-your-openai-organization-id  
+OPENAI_API_KEY=<your-openai-api-key>
+```
+<hr>    
 
 ### References
 #### DeepSeek References:
@@ -30,3 +32,7 @@ DEEPSEEK_API_KEY=<your-deepseek-api-key>
 
 #### Gemini References:
 - [Gemini Official Documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/content-generation-parameters)
+
+#### OpenAI References:
+- [OpenAI Official Documentation](https://platform.openai.com/docs/overview)
+- [OpenAI Java Package]()
