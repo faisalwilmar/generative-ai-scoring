@@ -35,4 +35,4 @@ OPENAI_API_KEY=<your-openai-api-key>
 
 #### OpenAI References:
 - [OpenAI Official Documentation](https://platform.openai.com/docs/overview)
-- [OpenAI Java Package]()
+- [OpenAI Java Package](https://github.com/openai/openai-java)

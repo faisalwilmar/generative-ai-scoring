@@ -7,6 +7,7 @@ import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.ChatCompletionSystemMessageParam;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
