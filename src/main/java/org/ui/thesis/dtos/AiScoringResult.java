@@ -38,5 +38,5 @@ public class AiScoringResult {
 
     private String aiFeedback;
 
-    private Long tokenUsage;
+    private Integer tokenUsage;
 }

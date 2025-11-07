@@ -66,10 +66,13 @@ public class Main {
 
 		List<AiScoringResult> feedbackRecords = new ArrayList<>();
 
+		AiModel aiModel = AiModel.GEMINI;
+		PromptTechnique promptTechnique = PromptTechnique.ZERO_SHOT;
+
 		for (List<AnswerScoreDto> answerScoreList : Objects.requireNonNull(processedRecords).values()){
 			AnswerScoreDto answerScoreQuestion3 = answerScoreList.stream().filter(a -> a.getQuestionType().equals(QuestionType.QUESTION_3)).toList().getFirst();
 			if (answerScoreQuestion3 != null){
-				Pair<Long, AiScoringFeedbackDto> feedbackDtoMap = studentScoring.getAiScoreAndFeedback(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT, scoringGuide, question, answerScoreQuestion3.getAnswer());
+				Pair<Integer, AiScoringFeedbackDto> feedbackDtoMap = studentScoring.getAiScoreAndFeedback(aiModel, promptTechnique, scoringGuide, question, answerScoreQuestion3.getAnswer());
 				AiScoringFeedbackDto feedbackDto = feedbackDtoMap.getRight();
 				AiScoringResult aiScoringResult = AiScoringResult.builder()
 						.semester(answerScoreQuestion3.getSemester())
@@ -79,8 +82,8 @@ public class Main {
 						.studentId(answerScoreQuestion3.getStudentId())
 						.questionType(QuestionType.QUESTION_3)
 						.answer(answerScoreQuestion3.getAnswer())
-						.aiModel(AiModel.CHATGPT)
-						.promptTechnique(PromptTechnique.ZERO_SHOT)
+						.aiModel(aiModel)
+						.promptTechnique(promptTechnique)
 						.aiScore(feedbackDto.llm_grade)
 						.aiFeedback(feedbackDto.getLlm_feedback())
 						.tokenUsage(feedbackDtoMap.getLeft())

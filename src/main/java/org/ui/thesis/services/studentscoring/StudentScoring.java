@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface StudentScoring {
 
-    Pair<Long, AiScoringFeedbackDto> getAiScoreAndFeedback(AiModel aiModel, PromptTechnique promptTechnique,
+    Pair<Integer, AiScoringFeedbackDto> getAiScoreAndFeedback(AiModel aiModel, PromptTechnique promptTechnique,
                                                            String scoringGuide, String question, String answer);
 
     Map<String, List<AnswerScoreDto>> matchResultWithScore(List<StudentAnswerDto> studentAnswers,
