@@ -36,3 +36,5 @@ OPENAI_API_KEY=<your-openai-api-key>
 #### OpenAI References:
 - [OpenAI Official Documentation](https://platform.openai.com/docs/overview)
 - [OpenAI Java Package](https://github.com/openai/openai-java)
+- [OpenAI Prompt Caching](https://platform.openai.com/docs/guides/prompt-caching)
+- [OpenAI Reasoning Model Best Practice](https://platform.openai.com/docs/guides/reasoning-best-practices)
