@@ -32,6 +32,7 @@ OPENAI_API_KEY=<your-openai-api-key>
 
 #### Gemini References:
 - [Gemini Official Documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/content-generation-parameters)
+- [Gemini Structured Output](https://ai.google.dev/gemini-api/docs/structured-output?example=recipe)
 
 #### OpenAI References:
 - [OpenAI Official Documentation](https://platform.openai.com/docs/overview)
