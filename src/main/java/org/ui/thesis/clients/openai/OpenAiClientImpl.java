@@ -5,11 +5,19 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
+import com.openai.models.Reasoning;
+import com.openai.models.ReasoningEffort;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import com.openai.models.chat.completions.ChatCompletionSystemMessageParam;
+import com.openai.models.responses.Response;
+import com.openai.models.responses.ResponseCreateParams;
+import com.openai.models.responses.ResponseOutputItem;
+import com.openai.models.responses.ResponseOutputText;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
+import org.ui.thesis.dtos.ChatMessage;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -50,4 +58,108 @@ public class OpenAiClientImpl implements OpenAiClient {
 		}
 	}
 
+	@Override
+	public <T> Pair<Long, T> response(Class<T> type, Double temperature, List<ChatMessage> messages, String promptCacheKey){
+
+		return response(type, temperature, messages, ChatModel.GPT_4_1, promptCacheKey);
+	}
+
+	@Override
+	public <T> Pair<Long, T> response(Class<T> type, Double temperature, List<ChatMessage> messages, ChatModel llmModel, String promptCacheKey){
+
+		try {
+			ResponseCreateParams.Builder paramsBuilder = ResponseCreateParams.builder();
+
+			if (temperature != null)
+				paramsBuilder.temperature(temperature);
+
+			if (promptCacheKey != null && !promptCacheKey.isBlank())
+				paramsBuilder.promptCacheKey(promptCacheKey);
+
+			StringBuilder inputBuilder = new StringBuilder();
+
+			for (ChatMessage chatMessage : messages) {
+				inputBuilder.append(chatMessage.message());
+			}
+
+			paramsBuilder.reasoning(Reasoning.builder().effort(ReasoningEffort.HIGH).build());
+
+			ResponseCreateParams params = paramsBuilder
+					.input(inputBuilder.toString())
+					.model(llmModel)
+					.build();
+			Response response = client.responses().create(params);
+			List<ResponseOutputItem> responseOutputItems = response.output();
+			ResponseOutputItem messageOutput = responseOutputItems.stream().filter(ResponseOutputItem::isMessage).toList().getFirst();
+
+			if (messageOutput != null) {
+				ResponseOutputText responseOutputText = messageOutput.message().get().content().getFirst().asOutputText();
+				Long tokenUsage = response.usage().get().totalTokens();
+				T result = objectMapper.readValue(responseOutputText.text(), type);
+
+				log.info("RESULT: " + responseOutputText.text());
+				log.info("TOKEN USAGE: " + tokenUsage);
+				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+				log.warn(jsonResponse);
+
+				return Pair.of(tokenUsage, result);
+			}
+			else {
+				log.warn("Nothing Retrieved");
+
+				return Pair.of(Integer.toUnsignedLong(0), null);
+			}
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+
+			return Pair.of(Integer.toUnsignedLong(0), null);
+		}
+
+	}
+
+	@Override
+	public <T> Pair<Long, T> chat(Class<T> type, Double temperature, List<ChatMessage> messages) {
+		try {
+			ChatCompletionCreateParams.Builder paramsBuilder = ChatCompletionCreateParams.builder();
+
+			paramsBuilder.temperature(temperature);
+
+			for (ChatMessage chatMessage : messages) {
+				switch (chatMessage.role()) {
+					case SYSTEM -> paramsBuilder.addSystemMessage(chatMessage.message());
+					case ASSISTANT -> paramsBuilder.addAssistantMessage(chatMessage.message());
+					default -> paramsBuilder.addUserMessage(chatMessage.message());
+				}
+			}
+
+			paramsBuilder.model(ChatModel.GPT_5_NANO);
+			ChatCompletionCreateParams contentParam = paramsBuilder.build();
+
+			ChatCompletion chatCompletion = client.chat().completions().create(contentParam);
+			ChatCompletion.Choice choice = chatCompletion.choices().getFirst();
+			Optional<String> content = choice.message().content();
+			if (content.isPresent()) {
+				long tokenUsage = chatCompletion.usage().get().totalTokens();
+				T result = objectMapper.readValue(content.get(), type);
+
+				log.info("RESULT: " + content.get());
+				log.info("TOKEN USAGE: " + tokenUsage);
+				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(chatCompletion);
+				log.warn(jsonResponse);
+
+				return Pair.of(tokenUsage, result);
+			}
+			else {
+				log.warn("Nothing Retrieved");
+
+				return Pair.of(Integer.toUnsignedLong(0), null);
+			}
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+
+			return Pair.of(Integer.toUnsignedLong(0), null);
+		}
+	}
 }

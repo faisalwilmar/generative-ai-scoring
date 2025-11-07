@@ -1,4 +1,4 @@
-package org.ui.thesis;
+package org.ui.thesis.enums;
 
 import lombok.Getter;
 

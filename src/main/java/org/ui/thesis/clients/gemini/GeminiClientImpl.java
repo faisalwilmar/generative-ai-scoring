@@ -23,9 +23,10 @@ public class GeminiClientImpl implements GeminiClient {
 
 	@Override
 	public void healthCheck() {
+		GenerateContentConfig contentConfig = GenerateContentConfig.builder().temperature(Float.valueOf("0")).build();
+
 		GenerateContentResponse response = googleClient.models.generateContent("gemini-2.5-flash",
-				"Explain how AI works in a few words",
-				GenerateContentConfig.builder().temperature(Float.valueOf("0")).build());
+				"Explain how AI works in a few words", contentConfig);
 
 		try {
 			log.info("RESULT: " + response.text());

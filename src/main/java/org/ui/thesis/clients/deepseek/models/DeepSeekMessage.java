@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ui.thesis.UserRole;
+import org.ui.thesis.enums.UserRole;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class DeepSeekMessage {
 	private String content;
 
 	/**
-	 * @see org.ui.thesis.UserRole for possible value.
+	 * @see UserRole for possible value.
 	 */
 	private String role;
 

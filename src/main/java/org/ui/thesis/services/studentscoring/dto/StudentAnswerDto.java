@@ -11,23 +11,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudentAnswerDto {
 
-    private String semester;
+	private String semester;
 
-    private String faculty;
+	private String faculty;
 
-    private String level;
+	private String level;
 
-    private String fullName;
+	private String fullName;
 
-    private String studentId;
+	private String studentId;
 
-    private String email;
+	private String email;
 
-    private String responseQuestion1;
+	private String responseQuestion1;
 
-    private String responseQuestion2;
+	private String responseQuestion2;
 
-    private String responseQuestion3;
+	private String responseQuestion3;
 
-    private String responseQuestion4;
+	private String responseQuestion4;
+
 }
