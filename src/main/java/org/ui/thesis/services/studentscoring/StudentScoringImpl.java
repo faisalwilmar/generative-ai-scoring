@@ -1,5 +1,6 @@
 package org.ui.thesis.services.studentscoring;
 
+import com.openai.models.ChatModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -115,7 +116,10 @@ public class StudentScoringImpl implements StudentScoring {
 
         ChatMessage userChatMessage = new ChatMessage(UserRole.USER, userMessage);
 
-        return openAiClient.response(AiScoringFeedbackDto.class, 0.2, List.of(systemChatMessage, userChatMessage), null);
+//		you may choose
+//        return openAiClient.response(AiScoringFeedbackDto.class, 0.2, List.of(systemChatMessage, userChatMessage), null);
+
+		return openAiClient.response(AiScoringFeedbackDto.class, null, List.of(systemChatMessage, userChatMessage), ChatModel.GPT_5, null);
     }
 
 	@Override

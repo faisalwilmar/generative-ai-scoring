@@ -97,10 +97,8 @@ public class OpenAiClientImpl implements OpenAiClient {
 				Long tokenUsage = response.usage().get().totalTokens();
 				T result = objectMapper.readValue(responseOutputText.text(), type);
 
-				log.info("RESULT: " + responseOutputText.text());
-				log.info("TOKEN USAGE: " + tokenUsage);
 				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-				log.warn(jsonResponse);
+				log.info("Actual Model Response: {}", jsonResponse);
 
 				return Pair.of(tokenUsage, result);
 			}
@@ -143,10 +141,8 @@ public class OpenAiClientImpl implements OpenAiClient {
 				long tokenUsage = chatCompletion.usage().get().totalTokens();
 				T result = objectMapper.readValue(content.get(), type);
 
-				log.info("RESULT: " + content.get());
-				log.info("TOKEN USAGE: " + tokenUsage);
 				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(chatCompletion);
-				log.warn(jsonResponse);
+				log.info("Actual Model Response: {}", jsonResponse);
 
 				return Pair.of(tokenUsage, result);
 			}
