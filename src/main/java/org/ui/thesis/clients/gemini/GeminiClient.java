@@ -1,6 +1,7 @@
 package org.ui.thesis.clients.gemini;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.ui.thesis.clients.gemini.models.GeminiModel;
 import org.ui.thesis.dtos.ChatMessage;
 
 import java.util.List;

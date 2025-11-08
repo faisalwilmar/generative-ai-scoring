@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.ui.thesis.clients.deepseek.DeepSeekClient;
 import org.ui.thesis.clients.gemini.GeminiClient;
-import org.ui.thesis.clients.gemini.GeminiModel;
+import org.ui.thesis.clients.gemini.models.GeminiModel;
 import org.ui.thesis.clients.openai.OpenAiClient;
 import org.ui.thesis.constants.PromptConstant;
 import org.ui.thesis.dtos.ChatMessage;

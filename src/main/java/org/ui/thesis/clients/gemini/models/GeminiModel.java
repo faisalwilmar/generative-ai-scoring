@@ -1,4 +1,4 @@
-package org.ui.thesis.clients.gemini;
+package org.ui.thesis.clients.gemini.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
