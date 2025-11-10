@@ -13,10 +13,10 @@ import java.util.Map;
 
 public interface StudentScoring {
 
-    Pair<Integer, AiScoringFeedbackDto> getAiScoreAndFeedback(AiModel aiModel, PromptTechnique promptTechnique,
-                                                           String scoringGuide, String question, String answer);
+	Pair<Integer, AiScoringFeedbackDto> getAiScoreAndFeedback(AiModel aiModel, PromptTechnique promptTechnique,
+			String scoringGuide, String question, String answer);
 
-    Map<String, List<AnswerScoreDto>> matchResultWithScore(List<StudentAnswerDto> studentAnswers,
-                                                           List<StudentGradeDto> studentGrades);
+	Map<String, List<AnswerScoreDto>> matchResultWithScore(List<StudentAnswerDto> studentAnswers,
+			List<StudentGradeDto> studentGrades);
 
 }

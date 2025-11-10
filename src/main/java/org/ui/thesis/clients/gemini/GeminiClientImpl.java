@@ -51,34 +51,38 @@ public class GeminiClientImpl implements GeminiClient {
 	}
 
 	@Override
-	public <T> Pair<Integer, T> response(Class<T> type, Float temperature, GeminiModel llmModel, List<ChatMessage> messages){
+	public <T> Pair<Integer, T> responseJson(Class<T> type, Float temperature, GeminiModel llmModel,
+			List<ChatMessage> messages) {
 		try {
 			GenerateContentConfig.Builder contentConfigBuilder = GenerateContentConfig.builder();
 
 			Map<String, Schema> outputSchema = new HashMap<>();
-			outputSchema.put("llm_grade", Schema.builder().type(Type.Known.INTEGER).description("The score you give").build());
-			outputSchema.put("llm_feedback", Schema.builder().type(Type.Known.STRING).description("Feedback for student").build());
+			outputSchema.put("llm_grade",
+					Schema.builder().type(Type.Known.INTEGER).description("The score you give").build());
+			outputSchema.put("llm_feedback",
+					Schema.builder().type(Type.Known.STRING).description("Feedback for student").build());
 
 			Schema finalResponseSchema = Schema.builder()
-					.properties(outputSchema)
-					.type(Type.Known.OBJECT)
-					.required(List.of("llm_grade", "llm_feedback"))
-					.build();
+				.properties(outputSchema)
+				.type(Type.Known.OBJECT)
+				.required(List.of("llm_grade", "llm_feedback"))
+				.build();
 
 			contentConfigBuilder.responseMimeType("application/json").responseSchema(finalResponseSchema);
 
 			if (temperature != null && !temperature.isNaN() && !temperature.isInfinite())
 				contentConfigBuilder.temperature(temperature);
-			else contentConfigBuilder.temperature((float) 0);
+			else
+				contentConfigBuilder.temperature((float) 0);
 
 			StringBuilder userPromptTextBuilder = new StringBuilder();
 
 			StringBuilder systemPromptTextBuilder = new StringBuilder();
 
-			for (ChatMessage chatMessage : messages){
+			for (ChatMessage chatMessage : messages) {
 				switch (chatMessage.role()) {
 					case SYSTEM, ASSISTANT -> systemPromptTextBuilder.append(chatMessage.message());
-                    default -> userPromptTextBuilder.append(chatMessage.message());
+					default -> userPromptTextBuilder.append(chatMessage.message());
 				}
 			}
 
@@ -86,13 +90,12 @@ public class GeminiClientImpl implements GeminiClient {
 			String systemPrompt = systemPromptTextBuilder.toString().trim();
 
 			if (!systemPrompt.isBlank())
-				contentConfigBuilder.systemInstruction(
-						Content.fromParts(Part.fromText(systemPrompt)));
+				contentConfigBuilder.systemInstruction(Content.fromParts(Part.fromText(systemPrompt)));
 
 			GenerateContentConfig contentConfig = contentConfigBuilder.build();
 
-			GenerateContentResponse response = googleClient.models.generateContent(llmModel.getModelCode(),
-					userPrompt, contentConfig);
+			GenerateContentResponse response = googleClient.models.generateContent(llmModel.getModelCode(), userPrompt,
+					contentConfig);
 
 			if (response.text() != null && !response.text().trim().isBlank()) {
 				Integer tokenUsage = response.usageMetadata().get().totalTokenCount().get();

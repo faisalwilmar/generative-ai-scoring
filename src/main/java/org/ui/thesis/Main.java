@@ -56,9 +56,9 @@ public class Main {
 
 		StudentScoring studentScoring = new StudentScoringImpl(deepSeekClient, openAiClient, geminiClient);
 
-		Map<String, List<AnswerScoreDto>> processedRecords =
-				JsonFileUtil.readJsonByReference(INPUT_FILE_PATH_SAMPLE, new TypeReference<>() {
-                });
+		Map<String, List<AnswerScoreDto>> processedRecords = JsonFileUtil.readJsonByReference(INPUT_FILE_PATH_SAMPLE,
+				new TypeReference<>() {
+				});
 
 		String scoringGuide = TextFileUtil.readAllText(INPUT_QUESTION_3_SCORING_GUIDE_FILE_PATH);
 
@@ -66,28 +66,32 @@ public class Main {
 
 		List<AiScoringResult> feedbackRecords = new ArrayList<>();
 
-		AiModel aiModel = AiModel.GEMINI;
+		AiModel aiModel = AiModel.DEEPSEEK;
 		PromptTechnique promptTechnique = PromptTechnique.ZERO_SHOT;
 
-		for (List<AnswerScoreDto> answerScoreList : Objects.requireNonNull(processedRecords).values()){
-			AnswerScoreDto answerScoreQuestion3 = answerScoreList.stream().filter(a -> a.getQuestionType().equals(QuestionType.QUESTION_3)).toList().getFirst();
-			if (answerScoreQuestion3 != null){
-				Pair<Integer, AiScoringFeedbackDto> feedbackDtoMap = studentScoring.getAiScoreAndFeedback(aiModel, promptTechnique, scoringGuide, question, answerScoreQuestion3.getAnswer());
+		for (List<AnswerScoreDto> answerScoreList : Objects.requireNonNull(processedRecords).values()) {
+			AnswerScoreDto answerScoreQuestion3 = answerScoreList.stream()
+				.filter(a -> a.getQuestionType().equals(QuestionType.QUESTION_3))
+				.toList()
+				.getFirst();
+			if (answerScoreQuestion3 != null) {
+				Pair<Integer, AiScoringFeedbackDto> feedbackDtoMap = studentScoring.getAiScoreAndFeedback(aiModel,
+						promptTechnique, scoringGuide, question, answerScoreQuestion3.getAnswer());
 				AiScoringFeedbackDto feedbackDto = feedbackDtoMap.getRight();
 				AiScoringResult aiScoringResult = AiScoringResult.builder()
-						.semester(answerScoreQuestion3.getSemester())
-						.faculty(answerScoreQuestion3.getFaculty())
-						.level(answerScoreQuestion3.getLevel())
-						.fullName(answerScoreQuestion3.getFullName())
-						.studentId(answerScoreQuestion3.getStudentId())
-						.questionType(QuestionType.QUESTION_3)
-						.answer(answerScoreQuestion3.getAnswer())
-						.aiModel(aiModel)
-						.promptTechnique(promptTechnique)
-						.aiScore(feedbackDto.llm_grade)
-						.aiFeedback(feedbackDto.getLlm_feedback())
-						.tokenUsage(feedbackDtoMap.getLeft())
-						.build();
+					.semester(answerScoreQuestion3.getSemester())
+					.faculty(answerScoreQuestion3.getFaculty())
+					.level(answerScoreQuestion3.getLevel())
+					.fullName(answerScoreQuestion3.getFullName())
+					.studentId(answerScoreQuestion3.getStudentId())
+					.questionType(QuestionType.QUESTION_3)
+					.answer(answerScoreQuestion3.getAnswer())
+					.aiModel(aiModel)
+					.promptTechnique(promptTechnique)
+					.aiScore(feedbackDto.getLlm_grade())
+					.aiFeedback(feedbackDto.getLlm_feedback())
+					.tokenUsage(feedbackDtoMap.getLeft())
+					.build();
 				feedbackRecords.add(aiScoringResult);
 			}
 		}
@@ -95,9 +99,9 @@ public class Main {
 		JsonFileUtil.writeObjectToFile(feedbackRecords, OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH);
 
 		System.out.println("Exported " + feedbackRecords.size() + " records.");
-    }
+	}
 
-	private void importAndMatchData(){
+	private void importAndMatchData() {
 		System.out.println("--- 1. IMPORT DATA ---");
 
 		List<StudentAnswerDto> importedStudentAnswerDto = JsonFileUtil.readJsonArrayFromFile(INPUT_FILE_PATH_ANSWER,
@@ -125,7 +129,7 @@ public class Main {
 		StudentScoring studentScoringSvc = new StudentScoringImpl();
 
 		Map<String, List<AnswerScoreDto>> processedRecords = studentScoringSvc
-				.matchResultWithScore(importedStudentAnswerDto, importedStudentGradeDto);
+			.matchResultWithScore(importedStudentAnswerDto, importedStudentGradeDto);
 
 		System.out.println("\n--- 3. EXPORT DATA ---");
 

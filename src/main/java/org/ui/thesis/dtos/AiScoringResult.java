@@ -16,27 +16,28 @@ import org.ui.thesis.enums.QuestionType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AiScoringResult {
 
-    private String semester;
+	private String semester;
 
-    private String faculty;
+	private String faculty;
 
-    private String level;
+	private String level;
 
-    private String fullName;
+	private String fullName;
 
-    private String studentId;
+	private String studentId;
 
-    private QuestionType questionType;
+	private QuestionType questionType;
 
-    private String answer;
+	private String answer;
 
-    private AiModel aiModel;
+	private AiModel aiModel;
 
-    private PromptTechnique promptTechnique;
+	private PromptTechnique promptTechnique;
 
-    private int aiScore;
+	private int aiScore;
 
-    private String aiFeedback;
+	private String aiFeedback;
 
-    private Integer tokenUsage;
+	private Integer tokenUsage;
+
 }

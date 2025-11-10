@@ -59,13 +59,15 @@ public class OpenAiClientImpl implements OpenAiClient {
 	}
 
 	@Override
-	public <T> Pair<Long, T> response(Class<T> type, Double temperature, List<ChatMessage> messages, String promptCacheKey){
+	public <T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
+			String promptCacheKey) {
 
-		return response(type, temperature, messages, ChatModel.GPT_4_1, promptCacheKey);
+		return responseJson(type, temperature, messages, ChatModel.GPT_4_1, promptCacheKey);
 	}
 
 	@Override
-	public <T> Pair<Long, T> response(Class<T> type, Double temperature, List<ChatMessage> messages, ChatModel llmModel, String promptCacheKey){
+	public <T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
+			ChatModel llmModel, String promptCacheKey) {
 
 		try {
 			ResponseCreateParams.Builder paramsBuilder = ResponseCreateParams.builder();
@@ -84,16 +86,20 @@ public class OpenAiClientImpl implements OpenAiClient {
 
 			paramsBuilder.reasoning(Reasoning.builder().effort(ReasoningEffort.HIGH).build());
 
-			ResponseCreateParams params = paramsBuilder
-					.input(inputBuilder.toString())
-					.model(llmModel)
-					.build();
+			ResponseCreateParams params = paramsBuilder.input(inputBuilder.toString()).model(llmModel).build();
 			Response response = client.responses().create(params);
 			List<ResponseOutputItem> responseOutputItems = response.output();
-			ResponseOutputItem messageOutput = responseOutputItems.stream().filter(ResponseOutputItem::isMessage).toList().getFirst();
+			ResponseOutputItem messageOutput = responseOutputItems.stream()
+				.filter(ResponseOutputItem::isMessage)
+				.toList()
+				.getFirst();
 
 			if (messageOutput != null) {
-				ResponseOutputText responseOutputText = messageOutput.message().get().content().getFirst().asOutputText();
+				ResponseOutputText responseOutputText = messageOutput.message()
+					.get()
+					.content()
+					.getFirst()
+					.asOutputText();
 				Long tokenUsage = response.usage().get().totalTokens();
 				T result = objectMapper.readValue(responseOutputText.text(), type);
 
@@ -158,4 +164,5 @@ public class OpenAiClientImpl implements OpenAiClient {
 			return Pair.of(Integer.toUnsignedLong(0), null);
 		}
 	}
+
 }

@@ -29,7 +29,7 @@ public class JsonFileUtil {
 	public static <T> List<T> readJsonArrayFromFile(String filePath, Class<T> elementClass) {
 		File file = new File(filePath);
 		if (!file.exists()) {
-            log.error("Error: File not found at path: {}", filePath);
+			log.error("Error: File not found at path: {}", filePath);
 			return Collections.emptyList();
 		}
 
@@ -42,7 +42,7 @@ public class JsonFileUtil {
 
 		}
 		catch (IOException e) {
-            log.error("Error reading or parsing JSON file: {}", filePath);
+			log.error("Error reading or parsing JSON file: {}", filePath);
 			log.error(Arrays.toString(e.getStackTrace()));
 			return Collections.emptyList();
 		}
@@ -61,11 +61,11 @@ public class JsonFileUtil {
 
 			// Write the list directly. Jackson will serialize it as a JSON array.
 			objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, dataList);
-            log.info("Successfully wrote data to file: {}", filePath);
+			log.info("Successfully wrote data to file: {}", filePath);
 			return true;
 		}
 		catch (IOException e) {
-            log.error("Error writing data to JSON file: {}", filePath);
+			log.error("Error writing data to JSON file: {}", filePath);
 			log.error(Arrays.toString(e.getStackTrace()));
 			return false;
 		}
@@ -84,36 +84,37 @@ public class JsonFileUtil {
 
 			// Write the list directly. Jackson will serialize it as a JSON array.
 			objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, data);
-            log.info("Successfully wrote data to file: {}", filePath);
+			log.info("Successfully wrote data to file: {}", filePath);
 			return true;
 		}
 		catch (IOException e) {
-            log.error("Error writing data to JSON file: {}", filePath);
+			log.error("Error writing data to JSON file: {}", filePath);
 			log.error(Arrays.toString(e.getStackTrace()));
 			return false;
 		}
 	}
 
 	/**
-	 * Reads a JSON file into a complex generic structure defined by a TypeReference.
-	 * This is the most flexible reading method for nested types (Maps, Lists of Maps, etc.).
-	 *
+	 * Reads a JSON file into a complex generic structure defined by a TypeReference. This
+	 * is the most flexible reading method for nested types (Maps, Lists of Maps, etc.).
 	 * @param <T> The target complex type.
 	 * @param filePath The path to the input JSON file.
-	 * @param typeRef The TypeReference defining the full generic structure (e.g., new TypeReference<Map<String, List<AnswerScoreDto>>>() {}).
+	 * @param typeRef The TypeReference defining the full generic structure (e.g., new
+	 * TypeReference<Map<String, List<AnswerScoreDto>>>() {}).
 	 * @return The deserialized object of type T, or null on error.
 	 */
 	public static <T> T readJsonByReference(String filePath, TypeReference<T> typeRef) {
 		File file = new File(filePath);
 		if (!file.exists()) {
-            log.info("Error: File not found at path: {}", filePath);
+			log.info("Error: File not found at path: {}", filePath);
 			return null;
 		}
 
 		try {
 			return objectMapper.readValue(file, typeRef);
-		} catch (IOException e) {
-            log.error("Error reading or parsing complex JSON file: {}", filePath);
+		}
+		catch (IOException e) {
+			log.error("Error reading or parsing complex JSON file: {}", filePath);
 			log.error(Arrays.toString(e.getStackTrace()));
 			return null;
 		}
@@ -121,7 +122,6 @@ public class JsonFileUtil {
 
 	/**
 	 * Serializes a complex generic object T into a JSON file.
-	 *
 	 * @param <T> The complex object type.
 	 * @param dataObject The complex object to write (e.g., a Map).
 	 * @param filePath The path to the output JSON file.
@@ -131,10 +131,11 @@ public class JsonFileUtil {
 		try {
 			File file = new File(filePath);
 			objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, dataObject);
-            log.info("Successfully wrote complex data to file: {}", filePath);
+			log.info("Successfully wrote complex data to file: {}", filePath);
 			return true;
-		} catch (IOException e) {
-            log.error("Error writing complex data to JSON file: {}", filePath);
+		}
+		catch (IOException e) {
+			log.error("Error writing complex data to JSON file: {}", filePath);
 			log.error(Arrays.toString(e.getStackTrace()));
 			return false;
 		}

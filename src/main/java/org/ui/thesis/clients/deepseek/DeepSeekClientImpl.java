@@ -3,10 +3,12 @@ package org.ui.thesis.clients.deepseek;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.ui.thesis.clients.deepseek.models.DeepSeekMessage;
 import org.ui.thesis.clients.deepseek.models.DeepSeekModel;
 import org.ui.thesis.clients.deepseek.models.DeepSeekNoStreamResponse;
 import org.ui.thesis.clients.deepseek.models.DeepSeekRequest;
+import org.ui.thesis.clients.deepseek.models.JsonProperty;
 import org.ui.thesis.exceptions.DeepSeekException;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +60,7 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 	public void healthCheck() {
 		try {
 			DeepSeekNoStreamResponse response = this.chat(DeepSeekModel.DEEPSEEK_CHAT,
-					List.of(DeepSeekMessage.ofUser("Explain how AI works in a few words")));
+					new ArrayList<>(List.of(DeepSeekMessage.ofUser("Explain how AI works in a few words"))));
 			log.info("RESULT: " + response.getChoices().getFirst().getMessage().getContent());
 			log.info("TOKEN USAGE: " + response.getUsage().getTotalTokens());
 			String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
@@ -72,16 +75,40 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 	 * Response Content is a text.
 	 */
 	@Override
-	public DeepSeekNoStreamResponse chat(DeepSeekModel model, List<DeepSeekMessage> messages) throws DeepSeekException {
+	public DeepSeekNoStreamResponse chat(DeepSeekModel model, ArrayList<DeepSeekMessage> messages)
+			throws DeepSeekException {
 		return chat(model, messages, null, null, null, new DeepSeekRequest.ResponseFormat("text"), null);
+	}
+
+	@Override
+	public <T> Pair<Integer, T> responseJson(Class<T> type, DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
+			List<JsonProperty> properties, Double temperature) {
+
+		try {
+			DeepSeekNoStreamResponse response = chatJson(model, messages, properties, temperature);
+			Integer tokenUsage = response.getUsage().getTotalTokens();
+
+			T result = objectMapper.readValue(response.getChoices().getFirst().getMessage().getContent(), type);
+
+			String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+			log.info("Actual Model Response: {}", jsonResponse);
+
+			return Pair.of(tokenUsage, result);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+
+			return Pair.of(0, null);
+		}
+
 	}
 
 	/**
 	 * Response Content is a parseable json format.
 	 */
 	@Override
-	public DeepSeekNoStreamResponse chatJson(DeepSeekModel model, List<DeepSeekMessage> messages,
-			List<JsonProperty> properties) throws DeepSeekException {
+	public DeepSeekNoStreamResponse chatJson(DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
+			List<JsonProperty> properties, Double temperature) throws DeepSeekException {
 
 		StringBuilder promptBuilder = new StringBuilder();
 		promptBuilder.append("Response in JSON format with properties: ");
@@ -99,11 +126,11 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 
 		messages.add(DeepSeekMessage.ofSystem(jsonPrompt));
 
-		return chat(model, messages, null, null, null, new DeepSeekRequest.ResponseFormat("json_object"), null);
+		return chat(model, messages, null, null, null, new DeepSeekRequest.ResponseFormat("json_object"), temperature);
 	}
 
 	@Override
-	public DeepSeekNoStreamResponse chat(DeepSeekModel model, List<DeepSeekMessage> messages, Integer topP,
+	public DeepSeekNoStreamResponse chat(DeepSeekModel model, ArrayList<DeepSeekMessage> messages, Integer topP,
 			Integer frequencyPenalty, Integer maxTokens, DeepSeekRequest.ResponseFormat responseFormat,
 			Double temperature) throws DeepSeekException {
 		DeepSeekRequest request = DeepSeekRequest.builder()
@@ -146,14 +173,6 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 		catch (Exception e) {
 			throw new DeepSeekException("Something went wrong", e);
 		}
-	}
-
-	/**
-	 * @param name
-	 * @param dataType Data Type class, e.g: {@code int.class}, {@code String.class},
-	 * {@code Integer.class}.
-	 */
-	public record JsonProperty(String name, Class<?> dataType) {
 	}
 
 }
