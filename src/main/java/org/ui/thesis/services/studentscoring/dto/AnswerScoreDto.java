@@ -1,5 +1,6 @@
 package org.ui.thesis.services.studentscoring.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.ui.thesis.enums.QuestionType;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AnswerScoreDto {
 
 	public String semester;
@@ -33,5 +35,7 @@ public class AnswerScoreDto {
 	public int finalScore;
 
 	public int originalScore;
+
+	public String scoreReasoning;
 
 }

@@ -1,6 +1,5 @@
 package org.ui.thesis;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -26,7 +25,6 @@ import org.ui.thesis.utils.JsonFileUtil;
 import org.ui.thesis.utils.TextFileUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,13 +37,19 @@ public class Main {
 
 	private static final String OUTPUT_FILE_PATH_ANSWER_GRADE = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/WRITING TEST/GROUPED RESPONSE (use this)/SEMESTER 6 GABUNGAN FK FKG ELITEP/Matched Responses to Grade.json";
 
-	private static final String INPUT_FILE_PATH_SAMPLE = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Sample to Process.json";
+	// ====
+
+	private static final String INPUT_FILE_PATH_ZERO_SHOT = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Zero Shot Sample/Zero Shot Sample to Process.json";
+
+	private static final String INPUT_FILE_PATH_FEW_SHOT = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Few Shot Sample/Few Shot Sample to Process.json";
+
+	private static final String INPUT_EXAMPLE_FILE_PATH_FEW_SHOT = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Few Shot Sample/Few Shot Example Prompt.json";
 
 	private static final String INPUT_QUESTION_3_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Question 3 Advanced.txt";
 
 	private static final String INPUT_QUESTION_3_SCORING_GUIDE_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Question 3 Scoring Guide.txt";
 
-	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Sample Result.json";
+	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Few Shot Sample/Sample Result.json";
 
 	private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module());
 
@@ -56,9 +60,12 @@ public class Main {
 
 		StudentScoring studentScoring = new StudentScoringImpl(deepSeekClient, openAiClient, geminiClient);
 
-		Map<String, List<AnswerScoreDto>> processedRecords = JsonFileUtil.readJsonByReference(INPUT_FILE_PATH_SAMPLE,
+		Map<String, List<AnswerScoreDto>> processedRecords = JsonFileUtil.readJsonByReference(INPUT_FILE_PATH_FEW_SHOT,
 				new TypeReference<>() {
 				});
+
+		List<AnswerScoreDto> exampleFewShot = JsonFileUtil.readJsonArrayFromFile(INPUT_EXAMPLE_FILE_PATH_FEW_SHOT,
+				AnswerScoreDto.class);
 
 		String scoringGuide = TextFileUtil.readAllText(INPUT_QUESTION_3_SCORING_GUIDE_FILE_PATH);
 
@@ -66,8 +73,8 @@ public class Main {
 
 		List<AiScoringResult> feedbackRecords = new ArrayList<>();
 
-		AiModel aiModel = AiModel.DEEPSEEK;
-		PromptTechnique promptTechnique = PromptTechnique.ZERO_SHOT;
+		AiModel aiModel = AiModel.GEMINI;
+		PromptTechnique promptTechnique = PromptTechnique.FEW_SHOT;
 
 		for (List<AnswerScoreDto> answerScoreList : Objects.requireNonNull(processedRecords).values()) {
 			AnswerScoreDto answerScoreQuestion3 = answerScoreList.stream()
@@ -76,7 +83,7 @@ public class Main {
 				.getFirst();
 			if (answerScoreQuestion3 != null) {
 				Pair<Integer, AiScoringFeedbackDto> feedbackDtoMap = studentScoring.getAiScoreAndFeedback(aiModel,
-						promptTechnique, scoringGuide, question, answerScoreQuestion3.getAnswer());
+						promptTechnique, exampleFewShot, scoringGuide, question, answerScoreQuestion3.getAnswer());
 				AiScoringFeedbackDto feedbackDto = feedbackDtoMap.getRight();
 				AiScoringResult aiScoringResult = AiScoringResult.builder()
 					.semester(answerScoreQuestion3.getSemester())

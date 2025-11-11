@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.ui.thesis.clients.deepseek.DeepSeekClient;
 import org.ui.thesis.clients.deepseek.models.DeepSeekMessage;
 import org.ui.thesis.clients.deepseek.models.DeepSeekModel;
@@ -42,14 +43,7 @@ public class StudentScoringImpl implements StudentScoring {
 
 	@Override
 	public Pair<Integer, AiScoringFeedbackDto> getAiScoreAndFeedback(AiModel aiModel, PromptTechnique promptTechnique,
-			String scoringGuide, String question, String answer) {
-
-		String promptTemplate = "";
-
-		// buang aja nantinya
-		promptTemplate = promptTemplate.replace("{{scoring guide}}", scoringGuide)
-			.replace("{{question}}", question)
-			.replace("{{student answer}}", answer);
+			List<AnswerScoreDto> exampleAnswerScore, String scoringGuide, String question, String answer) {
 
 		Pair<Integer, AiScoringFeedbackDto> response = Pair.of(0, new AiScoringFeedbackDto());
 
@@ -60,7 +54,7 @@ public class StudentScoringImpl implements StudentScoring {
 						response = geminiZeroShotScoring(scoringGuide, question, answer);
 					}
 					case FEW_SHOT -> {
-
+						response = geminiFewShotScoring(exampleAnswerScore, scoringGuide, question, answer);
 					}
 					case CHAIN_OF_THOUGHT -> {
 
@@ -91,7 +85,7 @@ public class StudentScoringImpl implements StudentScoring {
 			case DEEPSEEK -> {
 				switch (promptTechnique) {
 					case ZERO_SHOT -> {
-						return deepseekZeroShotScoring(scoringGuide, question, answer);
+						return deepSeekZeroShotScoring(scoringGuide, question, answer);
 					}
 					case FEW_SHOT -> {
 
@@ -114,7 +108,7 @@ public class StudentScoringImpl implements StudentScoring {
 
 	private Pair<Long, AiScoringFeedbackDto> chatGptZeroShotScoring(String scoringGuide, String question,
 			String answer) {
-		String systemMessage = PromptConstant.ZeroShotSystemMessage.replace("{{scoring guide}}", scoringGuide)
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
 			.replace("{{question}}", question);
 
 		ChatMessage systemChatMessage = new ChatMessage(UserRole.SYSTEM, systemMessage);
@@ -133,7 +127,7 @@ public class StudentScoringImpl implements StudentScoring {
 
 	private Pair<Integer, AiScoringFeedbackDto> geminiZeroShotScoring(String scoringGuide, String question,
 			String answer) {
-		String systemMessage = PromptConstant.ZeroShotSystemMessage.replace("{{scoring guide}}", scoringGuide)
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
 			.replace("{{question}}", question);
 
 		ChatMessage systemChatMessage = new ChatMessage(UserRole.SYSTEM, systemMessage);
@@ -146,9 +140,22 @@ public class StudentScoringImpl implements StudentScoring {
 				List.of(systemChatMessage, userChatMessage));
 	}
 
-	private Pair<Integer, AiScoringFeedbackDto> deepseekZeroShotScoring(String scoringGuide, String question,
+	private Pair<Integer, AiScoringFeedbackDto> geminiFewShotScoring(List<AnswerScoreDto> exampleAnswerScore,
+			String scoringGuide, String question, String answer) {
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
+			.replace("{{question}}", question);
+
+		ChatMessage systemChatMessage = new ChatMessage(UserRole.SYSTEM, systemMessage);
+
+		ChatMessage userChatMessage = getFewShotChatMessage(exampleAnswerScore, answer);
+
+		return geminiClient.responseJson(AiScoringFeedbackDto.class, Float.valueOf("0.0"), GeminiModel.GEMINI_2_5_FLASH,
+				List.of(systemChatMessage, userChatMessage));
+	}
+
+	private Pair<Integer, AiScoringFeedbackDto> deepSeekZeroShotScoring(String scoringGuide, String question,
 			String answer) {
-		String systemMessage = PromptConstant.ZeroShotSystemMessage.replace("{{scoring guide}}", scoringGuide)
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
 			.replace("{{question}}", question);
 
 		DeepSeekMessage systemChatMessage = DeepSeekMessage.ofSystem(systemMessage);
@@ -162,6 +169,22 @@ public class StudentScoringImpl implements StudentScoring {
 
 		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_REASONER,
 				new ArrayList<>(List.of(systemChatMessage, userChatMessage)), List.of(llmGrade, llmFeedback), 0.0);
+	}
+
+	private @NotNull ChatMessage getFewShotChatMessage(List<AnswerScoreDto> exampleAnswerScore, String answer) {
+		StringBuilder userMessageBuilder = new StringBuilder();
+
+		for (AnswerScoreDto answerScoreDto : exampleAnswerScore) {
+			userMessageBuilder
+				.append(PromptConstant.FewShotExampleUserMessage.replace("{{example answer}}", answerScoreDto.answer)
+					.replace("{{example point}}", String.valueOf(answerScoreDto.getOriginalScore())));
+		}
+
+		userMessageBuilder.append(PromptConstant.ZeroShotUserMessage.replace("{{student answer}}", answer));
+
+		String userMessage = userMessageBuilder.toString();
+
+		return new ChatMessage(UserRole.USER, userMessage);
 	}
 
 	@Override
