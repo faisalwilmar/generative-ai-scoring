@@ -88,7 +88,7 @@ public class StudentScoringImpl implements StudentScoring {
 						return deepSeekZeroShotScoring(scoringGuide, question, answer);
 					}
 					case FEW_SHOT -> {
-
+						return deepSeekFewZeroShotScoring(exampleAnswerScore, scoringGuide, question, answer);
 					}
 					case CHAIN_OF_THOUGHT -> {
 
@@ -168,6 +168,25 @@ public class StudentScoringImpl implements StudentScoring {
 		JsonProperty llmFeedback = new JsonProperty("llm_feedback", String.class);
 
 		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_REASONER,
+				new ArrayList<>(List.of(systemChatMessage, userChatMessage)), List.of(llmGrade, llmFeedback), 0.0);
+	}
+
+	private Pair<Integer, AiScoringFeedbackDto> deepSeekFewZeroShotScoring(List<AnswerScoreDto> exampleAnswerScore,
+			String scoringGuide, String question, String answer) {
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
+			.replace("{{question}}", question);
+
+		DeepSeekMessage systemChatMessage = DeepSeekMessage.ofSystem(systemMessage);
+
+		String userMessage = getFewShotChatMessage(exampleAnswerScore, answer).message();
+		;
+
+		DeepSeekMessage userChatMessage = DeepSeekMessage.ofUser(userMessage);
+
+		JsonProperty llmGrade = new JsonProperty("llm_grade", Integer.class);
+		JsonProperty llmFeedback = new JsonProperty("llm_feedback", String.class);
+
+		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_CHAT,
 				new ArrayList<>(List.of(systemChatMessage, userChatMessage)), List.of(llmGrade, llmFeedback), 0.0);
 	}
 
