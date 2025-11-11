@@ -1,6 +1,5 @@
 package org.ui.thesis.services.studentscoring;
 
-import com.openai.models.ChatModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -72,7 +71,9 @@ public class StudentScoringImpl implements StudentScoring {
 						response = Pair.of(chatGptResponse.getLeft().intValue(), chatGptResponse.getRight());
 					}
 					case FEW_SHOT -> {
-
+						Pair<Long, AiScoringFeedbackDto> chatGptResponse = chatGptFewShotScoring(exampleAnswerScore,
+								scoringGuide, question, answer);
+						response = Pair.of(chatGptResponse.getLeft().intValue(), chatGptResponse.getRight());
 					}
 					case CHAIN_OF_THOUGHT -> {
 
@@ -118,11 +119,25 @@ public class StudentScoringImpl implements StudentScoring {
 		ChatMessage userChatMessage = new ChatMessage(UserRole.USER, userMessage);
 
 		// you may choose
-		// return openAiClient.response(AiScoringFeedbackDto.class, 0.2,
-		// List.of(systemChatMessage, userChatMessage), null);
+		return openAiClient.responseJson(AiScoringFeedbackDto.class, 0.0, List.of(systemChatMessage, userChatMessage),
+				"zero-shot-question-3");
 
-		return openAiClient.responseJson(AiScoringFeedbackDto.class, null, List.of(systemChatMessage, userChatMessage),
-				ChatModel.GPT_5, null);
+		// return openAiClient.responseJson(AiScoringFeedbackDto.class, null,
+		// List.of(systemChatMessage, userChatMessage),
+		// ChatModel.GPT_5, null);
+	}
+
+	private Pair<Long, AiScoringFeedbackDto> chatGptFewShotScoring(List<AnswerScoreDto> exampleAnswerScore,
+			String scoringGuide, String question, String answer) {
+		String systemMessage = PromptConstant.InstructionSystemMessage.replace("{{scoring guide}}", scoringGuide)
+			.replace("{{question}}", question);
+
+		ChatMessage systemChatMessage = new ChatMessage(UserRole.SYSTEM, systemMessage);
+
+		ChatMessage userChatMessage = getFewShotChatMessage(exampleAnswerScore, answer);
+
+		return openAiClient.responseJson(AiScoringFeedbackDto.class, 0.0, List.of(systemChatMessage, userChatMessage),
+				"few-shot-question-3");
 	}
 
 	private Pair<Integer, AiScoringFeedbackDto> geminiZeroShotScoring(String scoringGuide, String question,
@@ -136,7 +151,7 @@ public class StudentScoringImpl implements StudentScoring {
 
 		ChatMessage userChatMessage = new ChatMessage(UserRole.USER, userMessage);
 
-		return geminiClient.responseJson(AiScoringFeedbackDto.class, Float.valueOf("0.0"), GeminiModel.GEMINI_2_5_PRO,
+		return geminiClient.responseJson(AiScoringFeedbackDto.class, Float.valueOf("0.0"), GeminiModel.GEMINI_2_5_FLASH,
 				List.of(systemChatMessage, userChatMessage));
 	}
 
@@ -164,10 +179,10 @@ public class StudentScoringImpl implements StudentScoring {
 
 		DeepSeekMessage userChatMessage = DeepSeekMessage.ofUser(userMessage);
 
-		JsonProperty llmGrade = new JsonProperty("llm_grade", Integer.class);
-		JsonProperty llmFeedback = new JsonProperty("llm_feedback", String.class);
+		JsonProperty llmGrade = new JsonProperty("llm_grade", "The score you give", Integer.class);
+		JsonProperty llmFeedback = new JsonProperty("llm_feedback", "Feedback for student", String.class);
 
-		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_REASONER,
+		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_CHAT,
 				new ArrayList<>(List.of(systemChatMessage, userChatMessage)), List.of(llmGrade, llmFeedback), 0.0);
 	}
 
@@ -179,12 +194,11 @@ public class StudentScoringImpl implements StudentScoring {
 		DeepSeekMessage systemChatMessage = DeepSeekMessage.ofSystem(systemMessage);
 
 		String userMessage = getFewShotChatMessage(exampleAnswerScore, answer).message();
-		;
 
 		DeepSeekMessage userChatMessage = DeepSeekMessage.ofUser(userMessage);
 
-		JsonProperty llmGrade = new JsonProperty("llm_grade", Integer.class);
-		JsonProperty llmFeedback = new JsonProperty("llm_feedback", String.class);
+		JsonProperty llmGrade = new JsonProperty("llm_grade", "The score you give", Integer.class);
+		JsonProperty llmFeedback = new JsonProperty("llm_feedback", "Feedback for student", String.class);
 
 		return deepSeekClient.responseJson(AiScoringFeedbackDto.class, DeepSeekModel.DEEPSEEK_CHAT,
 				new ArrayList<>(List.of(systemChatMessage, userChatMessage)), List.of(llmGrade, llmFeedback), 0.0);

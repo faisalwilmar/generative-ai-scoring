@@ -73,7 +73,7 @@ public class Main {
 
 		List<AiScoringResult> feedbackRecords = new ArrayList<>();
 
-		AiModel aiModel = AiModel.DEEPSEEK;
+		AiModel aiModel = AiModel.CHATGPT;
 		PromptTechnique promptTechnique = PromptTechnique.FEW_SHOT;
 
 		for (List<AnswerScoreDto> answerScoreList : Objects.requireNonNull(processedRecords).values()) {

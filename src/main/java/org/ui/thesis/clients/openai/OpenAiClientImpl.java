@@ -84,7 +84,7 @@ public class OpenAiClientImpl implements OpenAiClient {
 				inputBuilder.append(chatMessage.message());
 			}
 
-			paramsBuilder.reasoning(Reasoning.builder().effort(ReasoningEffort.HIGH).build());
+			// paramsBuilder.reasoning(Reasoning.builder().effort(ReasoningEffort.HIGH).build());
 
 			ResponseCreateParams params = paramsBuilder.input(inputBuilder.toString()).model(llmModel).build();
 			Response response = client.responses().create(params);
