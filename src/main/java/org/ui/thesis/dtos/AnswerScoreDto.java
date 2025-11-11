@@ -1,4 +1,4 @@
-package org.ui.thesis.services.studentscoring.dto;
+package org.ui.thesis.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -1,4 +1,4 @@
-package org.ui.thesis.services.studentscoring.dto;
+package org.ui.thesis.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -19,9 +19,9 @@ import org.ui.thesis.enums.PromptTechnique;
 import org.ui.thesis.enums.QuestionType;
 import org.ui.thesis.enums.UserRole;
 import org.ui.thesis.services.studentscoring.dto.AiScoringFeedbackDto;
-import org.ui.thesis.services.studentscoring.dto.AnswerScoreDto;
-import org.ui.thesis.services.studentscoring.dto.StudentAnswerDto;
-import org.ui.thesis.services.studentscoring.dto.StudentGradeDto;
+import org.ui.thesis.dtos.AnswerScoreDto;
+import org.ui.thesis.dtos.StudentAnswerDto;
+import org.ui.thesis.dtos.StudentGradeDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,9 +58,7 @@ public class StudentScoringImpl implements StudentScoring {
 					case CHAIN_OF_THOUGHT -> {
 
 					}
-					default -> {
-						response = null;
-					}
+					default -> response = null;
 				}
 			}
 			case CHATGPT -> {
@@ -78,9 +76,7 @@ public class StudentScoringImpl implements StudentScoring {
 					case CHAIN_OF_THOUGHT -> {
 
 					}
-					default -> {
-						response = null;
-					}
+					default -> response = null;
 				}
 			}
 			case DEEPSEEK -> {
@@ -94,14 +90,10 @@ public class StudentScoringImpl implements StudentScoring {
 					case CHAIN_OF_THOUGHT -> {
 
 					}
-					default -> {
-						response = null;
-					}
+					default -> response = null;
 				}
 			}
-			default -> {
-				response = null;
-			}
+			default -> response = null;
 		}
 
 		return response;
