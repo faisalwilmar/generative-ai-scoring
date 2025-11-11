@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ui.thesis.enums.StudentLevel;
 
 @Data
 @Builder
@@ -15,7 +16,7 @@ public class StudentAnswerDto {
 
 	private String faculty;
 
-	private String level;
+	private StudentLevel level;
 
 	private String fullName;
 

@@ -1,5 +1,6 @@
 package org.ui.thesis.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -15,6 +16,12 @@ public enum QuestionType {
 
 	public int getOriginalScore(double convertedScore) {
 		return ((int) convertedScore / multiplier);
+	}
+
+	@JsonCreator
+	public static QuestionType fromName(String name) {
+		// Enum.valueOf is highly efficient for matching constant names
+		return QuestionType.valueOf(name);
 	}
 
 }

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ui.thesis.enums.QuestionType;
+import org.ui.thesis.enums.StudentLevel;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class AnswerScoreDto {
 
 	public String faculty;
 
-	public String level;
+	public StudentLevel level;
 
 	public String fullName;
 

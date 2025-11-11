@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.ui.thesis.enums.AiModel;
 import org.ui.thesis.enums.PromptTechnique;
 import org.ui.thesis.enums.QuestionType;
+import org.ui.thesis.enums.StudentLevel;
 
 @Builder
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class AiScoringResult {
 
 	private String faculty;
 
-	private String level;
+	private StudentLevel level;
 
 	private String fullName;
 
