@@ -1,8 +1,7 @@
 package org.ui.thesis;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.genai.Client;
+import org.apache.commons.lang3.tuple.Pair;
 import org.ui.thesis.clients.deepseek.DeepSeekClient;
 import org.ui.thesis.clients.deepseek.DeepSeekClientImpl;
 import org.ui.thesis.clients.gemini.GeminiClient;
@@ -10,24 +9,30 @@ import org.ui.thesis.clients.gemini.GeminiClientImpl;
 import org.ui.thesis.clients.openai.OpenAiClient;
 import org.ui.thesis.clients.openai.OpenAiClientImpl;
 import org.ui.thesis.controllers.ScoringExecutor;
+import org.ui.thesis.dtos.CompiledStudentScore;
 import org.ui.thesis.enums.AiModel;
 import org.ui.thesis.enums.PromptTechnique;
+import org.ui.thesis.enums.QuestionType;
 import org.ui.thesis.services.dataprocessor.DataFormatter;
 import org.ui.thesis.services.dataprocessor.DataFormatterImpl;
 import org.ui.thesis.services.studentscoring.StudentScoring;
 import org.ui.thesis.services.studentscoring.StudentScoringImpl;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Main {
 
-	private static final String INPUT_FILE_PATH_ZERO_SHOT = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Zero Shot Sample/Zero Shot Sample to Process.json";
+	private static final String OUTPUT_FILE_NAME_PREFIX = "Result";
 
-	private static final String INPUT_FILE_PATH_FEW_SHOT = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Few Shot Sample/Few Shot Sample to Process.json";
+	private static final String INPUT_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Matched Responses to Grade.json";
 
-	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Sample Result.json";
+	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/004 Experiment/";
 
-	private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module());
+	private static final String OUTPUT_COMPILED_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/004 Experiment/compiled_scores.csv";
 
 	public static void main(String[] args) {
 		GeminiClient geminiClient = new GeminiClientImpl(Client.builder().build());
@@ -36,12 +41,58 @@ public class Main {
 
 		StudentScoring studentScoring = new StudentScoringImpl(deepSeekClient, openAiClient, geminiClient);
 		DataFormatter dataFormatter = new DataFormatterImpl();
-		ScoringExecutor executor = new ScoringExecutor(studentScoring, dataFormatter);
+		ScoringExecutor executor = new ScoringExecutor(studentScoring);
 
-		ConcurrentLinkedQueue<Exception> sharedErrorQueue = new ConcurrentLinkedQueue<>();
+		List<Pair<AiModel, PromptTechnique>> scoringToExecutes = new ArrayList<>();
+		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT,
+		// PromptTechnique.CHAIN_OF_THOUGHT));
+		// scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.GEMINI,
+		// PromptTechnique.CHAIN_OF_THOUGHT));
+		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.ZERO_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.FEW_SHOT));
+		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK,
+		// PromptTechnique.CHAIN_OF_THOUGHT));
 
-		executor.ExecuteQuestion3Scoring(sharedErrorQueue, INPUT_FILE_PATH_FEW_SHOT,
-				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH, AiModel.GEMINI, PromptTechnique.FEW_SHOT);
+		Map<Pair<AiModel, PromptTechnique>, String> aiResultFiles = new LinkedHashMap<>();
+		aiResultFiles.put(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " ChatGPT Zero Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " ChatGPT Few Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.CHATGPT, PromptTechnique.CHAIN_OF_THOUGHT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " ChatGPT CoT.json");
+		aiResultFiles.put(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " Gemini Zero Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " Gemini Few Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.GEMINI, PromptTechnique.CHAIN_OF_THOUGHT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " Gemini CoT.json");
+		aiResultFiles.put(Pair.of(AiModel.DEEPSEEK, PromptTechnique.ZERO_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " DeepSeek Zero Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.DEEPSEEK, PromptTechnique.FEW_SHOT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " DeepSeek Few Shot.json");
+		aiResultFiles.put(Pair.of(AiModel.DEEPSEEK, PromptTechnique.CHAIN_OF_THOUGHT),
+				OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX + OUTPUT_FILE_NAME_PREFIX + " DeepSeek CoT.json");
+
+		for (Pair<AiModel, PromptTechnique> scoringToExecute : scoringToExecutes) {
+			// The Java equivalent of ConcurrentBag<Exception>
+			ConcurrentLinkedQueue<Exception> sharedErrorQueue = new ConcurrentLinkedQueue<>();
+
+			executor.ExecuteQuestion3Scoring(sharedErrorQueue, INPUT_FILE_PATH, aiResultFiles.get(scoringToExecute),
+					scoringToExecute.getLeft(), scoringToExecute.getRight());
+		}
+
+		// === DO THIS AFTER ALL THE INPUT FINISHED
+
+		// Compile data for QUESTION_3 (can be changed to other question types)
+		List<CompiledStudentScore> compiledScores = dataFormatter.compileDataForQuestionType(INPUT_FILE_PATH,
+				aiResultFiles, QuestionType.QUESTION_3);
+
+		// Export to CSV
+		dataFormatter.exportToCSV(compiledScores, OUTPUT_COMPILED_FILE_PATH);
 	}
 
 	private void aiClientHealthCheck() {

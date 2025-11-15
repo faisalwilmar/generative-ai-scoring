@@ -33,9 +33,11 @@ OPENAI_API_KEY=<your-openai-api-key>
 #### Gemini References:
 - [Gemini Official Documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/content-generation-parameters)
 - [Gemini Structured Output](https://ai.google.dev/gemini-api/docs/structured-output?example=recipe)
+- [Gemini Prompt Technique](https://ai.google.dev/gemini-api/docs/prompting-strategies)
 
 #### OpenAI References:
 - [OpenAI Official Documentation](https://platform.openai.com/docs/overview)
 - [OpenAI Java Package](https://github.com/openai/openai-java)
 - [OpenAI Prompt Caching](https://platform.openai.com/docs/guides/prompt-caching)
 - [OpenAI Reasoning Model Best Practice](https://platform.openai.com/docs/guides/reasoning-best-practices)
+- [OpenAI Prompt Engineering](https://platform.openai.com/docs/guides/prompt-engineering)

@@ -1,5 +1,6 @@
 package org.ui.thesis.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,18 +22,22 @@ public class AiScoringResult {
 
 	private String faculty;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private StudentLevel level;
 
 	private String fullName;
 
 	private String studentId;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private QuestionType questionType;
 
 	private String answer;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private AiModel aiModel;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private PromptTechnique promptTechnique;
 
 	private int aiScore;

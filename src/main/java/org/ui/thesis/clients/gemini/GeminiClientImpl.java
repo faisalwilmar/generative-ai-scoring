@@ -12,7 +12,6 @@ import com.google.genai.types.Schema;
 import com.google.genai.types.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.ui.thesis.clients.deepseek.models.JsonProperty;
 import org.ui.thesis.clients.gemini.models.GeminiModel;
 import org.ui.thesis.dtos.ChatMessage;
 
