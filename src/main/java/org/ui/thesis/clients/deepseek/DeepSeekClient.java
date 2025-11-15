@@ -20,6 +20,9 @@ public interface DeepSeekClient {
 	<T> Pair<Integer, T> responseJson(Class<T> type, DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
 			List<JsonProperty> properties, Double temperature);
 
+	<T> Pair<Integer, T> responseJson(Class<T> type, DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
+			List<JsonProperty> properties, Double temperature, boolean logRawResult);
+
 	DeepSeekNoStreamResponse chatJson(DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
 			List<JsonProperty> properties, Double temperature) throws DeepSeekException;
 

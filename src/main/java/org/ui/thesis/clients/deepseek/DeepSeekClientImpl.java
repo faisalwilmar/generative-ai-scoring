@@ -83,6 +83,12 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 	@Override
 	public <T> Pair<Integer, T> responseJson(Class<T> type, DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
 			List<JsonProperty> properties, Double temperature) {
+		return responseJson(type, model, messages, properties, temperature, false);
+	}
+
+	@Override
+	public <T> Pair<Integer, T> responseJson(Class<T> type, DeepSeekModel model, ArrayList<DeepSeekMessage> messages,
+			List<JsonProperty> properties, Double temperature, boolean logRawResult) {
 
 		try {
 			DeepSeekNoStreamResponse response = chatJson(model, messages, properties, temperature);
@@ -90,8 +96,10 @@ public class DeepSeekClientImpl implements DeepSeekClient {
 
 			T result = objectMapper.readValue(response.getChoices().getFirst().getMessage().getContent(), type);
 
-			String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-			log.info("Actual Model Response: {}", jsonResponse);
+			if (logRawResult) {
+				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+				log.info("Actual Model Response: {}", jsonResponse);
+			}
 
 			return Pair.of(tokenUsage, result);
 		}

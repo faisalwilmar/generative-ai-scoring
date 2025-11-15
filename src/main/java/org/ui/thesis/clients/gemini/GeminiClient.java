@@ -13,4 +13,7 @@ public interface GeminiClient {
 	<T> Pair<Integer, T> responseJson(Class<T> type, Float temperature, GeminiModel llmModel,
 			List<ChatMessage> messages);
 
+	<T> Pair<Integer, T> responseJson(Class<T> type, Float temperature, GeminiModel llmModel,
+			List<ChatMessage> messages, boolean logRawResult);
+
 }

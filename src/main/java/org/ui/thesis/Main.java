@@ -28,11 +28,16 @@ public class Main {
 
 	private static final String OUTPUT_FILE_NAME_PREFIX = "Result";
 
-	private static final String INPUT_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/Matched Responses to Grade.json";
+	private static final String INPUT_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Matched Responses to Grade.json";
 
-	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/004 Experiment/";
+	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/005 Experiment/";
 
-	private static final String OUTPUT_COMPILED_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/004 Experiment/compiled_scores.csv";
+	private static final String OUTPUT_COMPILED_FILE_PATH = OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX
+			+ "compiled_scores.csv";
+
+	private static final int DEFAULT_MAX_RETRY_ATTEMPTS = 3;
+
+	private static final int DEFAULT_RETRY_WAIT_SECONDS = 5;
 
 	public static void main(String[] args) {
 		GeminiClient geminiClient = new GeminiClientImpl(Client.builder().build());
@@ -44,18 +49,15 @@ public class Main {
 		ScoringExecutor executor = new ScoringExecutor(studentScoring);
 
 		List<Pair<AiModel, PromptTechnique>> scoringToExecutes = new ArrayList<>();
-		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.CHATGPT,
-		// PromptTechnique.CHAIN_OF_THOUGHT));
-		// scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.GEMINI,
-		// PromptTechnique.CHAIN_OF_THOUGHT));
-		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.ZERO_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.FEW_SHOT));
-		// scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK,
-		// PromptTechnique.CHAIN_OF_THOUGHT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.CHAIN_OF_THOUGHT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.CHAIN_OF_THOUGHT));
+		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.ZERO_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.FEW_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.CHAIN_OF_THOUGHT));
 
 		Map<Pair<AiModel, PromptTechnique>, String> aiResultFiles = new LinkedHashMap<>();
 		aiResultFiles.put(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT),
@@ -81,8 +83,9 @@ public class Main {
 			// The Java equivalent of ConcurrentBag<Exception>
 			ConcurrentLinkedQueue<Exception> sharedErrorQueue = new ConcurrentLinkedQueue<>();
 
-			executor.ExecuteQuestion3Scoring(sharedErrorQueue, INPUT_FILE_PATH, aiResultFiles.get(scoringToExecute),
-					scoringToExecute.getLeft(), scoringToExecute.getRight());
+			executor.ExecuteQuestion3ScoringWithRetry(sharedErrorQueue, INPUT_FILE_PATH,
+					aiResultFiles.get(scoringToExecute), scoringToExecute.getLeft(), scoringToExecute.getRight(),
+					DEFAULT_MAX_RETRY_ATTEMPTS, DEFAULT_RETRY_WAIT_SECONDS);
 		}
 
 		// === DO THIS AFTER ALL THE INPUT FINISHED

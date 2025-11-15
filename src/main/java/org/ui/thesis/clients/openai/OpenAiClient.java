@@ -25,6 +25,9 @@ public interface OpenAiClient {
 	<T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
 			String promptCacheKey);
 
+	<T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages, String promptCacheKey,
+			boolean logRawResult);
+
 	/**
 	 * By default using gpt-4.1.
 	 * @param type Output Object Class.
@@ -41,6 +44,9 @@ public interface OpenAiClient {
 	 */
 	<T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages, ChatModel llmModel,
 			String promptCacheKey);
+
+	<T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages, ChatModel llmModel,
+			String promptCacheKey, boolean logRawResult);
 
 	@Deprecated
 	<T> Pair<Long, T> chat(Class<T> type, Double temperature, List<ChatMessage> messages);

@@ -53,6 +53,12 @@ public class GeminiClientImpl implements GeminiClient {
 	@Override
 	public <T> Pair<Integer, T> responseJson(Class<T> type, Float temperature, GeminiModel llmModel,
 			List<ChatMessage> messages) {
+		return responseJson(type, temperature, llmModel, messages, false);
+	}
+
+	@Override
+	public <T> Pair<Integer, T> responseJson(Class<T> type, Float temperature, GeminiModel llmModel,
+			List<ChatMessage> messages, boolean logRawResult) {
 		try {
 			GenerateContentConfig.Builder contentConfigBuilder = GenerateContentConfig.builder();
 
@@ -101,8 +107,10 @@ public class GeminiClientImpl implements GeminiClient {
 				Integer tokenUsage = response.usageMetadata().get().totalTokenCount().get();
 				T result = objectMapper.readValue(response.text(), type);
 
-				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-				log.info("Actual Model Response: {}", jsonResponse);
+				if (logRawResult) {
+					String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+					log.info("Actual Model Response: {}", jsonResponse);
+				}
 
 				return Pair.of(tokenUsage, result);
 			}

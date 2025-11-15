@@ -5,8 +5,6 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
-import com.openai.models.Reasoning;
-import com.openai.models.ReasoningEffort;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.responses.Response;
@@ -67,7 +65,20 @@ public class OpenAiClientImpl implements OpenAiClient {
 
 	@Override
 	public <T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
+			String promptCacheKey, boolean logRawResult) {
+
+		return responseJson(type, temperature, messages, ChatModel.GPT_4_1, promptCacheKey, logRawResult);
+	}
+
+	@Override
+	public <T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
 			ChatModel llmModel, String promptCacheKey) {
+		return responseJson(type, temperature, messages, llmModel, promptCacheKey, false);
+	}
+
+	@Override
+	public <T> Pair<Long, T> responseJson(Class<T> type, Double temperature, List<ChatMessage> messages,
+			ChatModel llmModel, String promptCacheKey, boolean logRawResult) {
 
 		try {
 			ResponseCreateParams.Builder paramsBuilder = ResponseCreateParams.builder();
@@ -103,8 +114,10 @@ public class OpenAiClientImpl implements OpenAiClient {
 				Long tokenUsage = response.usage().get().totalTokens();
 				T result = objectMapper.readValue(responseOutputText.text(), type);
 
-				String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-				log.info("Actual Model Response: {}", jsonResponse);
+				if (logRawResult) {
+					String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+					log.info("Actual Model Response: {}", jsonResponse);
+				}
 
 				return Pair.of(tokenUsage, result);
 			}
