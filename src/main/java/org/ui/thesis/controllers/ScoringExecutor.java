@@ -85,7 +85,6 @@ public class ScoringExecutor {
 			.filter(Objects::nonNull)
 			.flatMap(List::stream)
 			.filter(dto -> QuestionType.QUESTION_3.equals(dto.getQuestionType()))
-			.limit(10)
 			.toList();
 
 		Collection<Callable<AiScoringResult>> tasks = new ArrayList<>();
@@ -228,7 +227,6 @@ public class ScoringExecutor {
 			.filter(Objects::nonNull)
 			.flatMap(List::stream)
 			.filter(dto -> QuestionType.QUESTION_3.equals(dto.getQuestionType()))
-			.limit(10)
 			.toList();
 
 		List<AiScoringResult> feedbackRecords = new ArrayList<>();

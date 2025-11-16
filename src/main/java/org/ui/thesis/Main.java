@@ -30,7 +30,7 @@ public class Main {
 
 	private static final String INPUT_FILE_PATH = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Matched Responses to Grade.json";
 
-	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/005 Experiment/";
+	private static final String OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX = "E:/Cool Yeah/KA Ultimate/Bahan/Data Gathering/Result/007 Experiment/";
 
 	private static final String OUTPUT_COMPILED_FILE_PATH = OUTPUT_QUESTION_3_AI_FEEDBACK_FILE_PATH_PREFIX
 			+ "compiled_scores.csv";
@@ -49,15 +49,15 @@ public class Main {
 		ScoringExecutor executor = new ScoringExecutor(studentScoring);
 
 		List<Pair<AiModel, PromptTechnique>> scoringToExecutes = new ArrayList<>();
-		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT));
-		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT));
-		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.CHAIN_OF_THOUGHT));
-		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT));
-		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT));
-		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.CHAIN_OF_THOUGHT));
 		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.ZERO_SHOT));
 		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.FEW_SHOT));
 		scoringToExecutes.add(Pair.of(AiModel.DEEPSEEK, PromptTechnique.CHAIN_OF_THOUGHT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.ZERO_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.FEW_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.GEMINI, PromptTechnique.CHAIN_OF_THOUGHT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.FEW_SHOT));
+		scoringToExecutes.add(Pair.of(AiModel.CHATGPT, PromptTechnique.CHAIN_OF_THOUGHT));
 
 		Map<Pair<AiModel, PromptTechnique>, String> aiResultFiles = new LinkedHashMap<>();
 		aiResultFiles.put(Pair.of(AiModel.CHATGPT, PromptTechnique.ZERO_SHOT),
