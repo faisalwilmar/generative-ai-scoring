@@ -37,7 +37,7 @@ public class Main {
 
 	private static final int DEFAULT_MAX_RETRY_ATTEMPTS = 3;
 
-	private static final int DEFAULT_RETRY_WAIT_SECONDS = 5;
+	private static final int DEFAULT_RETRY_WAIT_SECONDS = 10;
 
 	public static void main(String[] args) {
 		GeminiClient geminiClient = new GeminiClientImpl(Client.builder().build());
@@ -86,6 +86,13 @@ public class Main {
 			executor.ExecuteQuestion3ScoringWithRetry(sharedErrorQueue, INPUT_FILE_PATH,
 					aiResultFiles.get(scoringToExecute), scoringToExecute.getLeft(), scoringToExecute.getRight(),
 					DEFAULT_MAX_RETRY_ATTEMPTS, DEFAULT_RETRY_WAIT_SECONDS);
+
+			// executor.executeQuestion3ManualRecovery(INPUT_FILE_PATH, "E:/Cool Yeah/KA
+			// Ultimate/Bahan/Data Gathering/Result/007 Experiment/temp_58_Result ChatGPT
+			// Zero Shot.json",
+			// aiResultFiles.get(scoringToExecute), scoringToExecute.getLeft(),
+			// scoringToExecute.getRight(), DEFAULT_MAX_RETRY_ATTEMPTS,
+			// DEFAULT_RETRY_WAIT_SECONDS);
 		}
 
 		// === DO THIS AFTER ALL THE INPUT FINISHED
